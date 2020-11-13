@@ -1,3 +1,4 @@
+//import dependencies
 const path = require("path");
 require("dotenv").config({
     path:path.resolve(
@@ -16,13 +17,15 @@ const GridFSStorage = require("multer-gridfs-storage");
 const GridFS = require("gridfs-stream");
 const multer = require("multer");
 const crypto = require("crypto");
+const addressRouter = require("./routers/addressRouter");
 
-console.log(MONGOOSE_CONNECTION_KEY)
-
+//express app configuration
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/addresses", addressRouter);
 
+//db file upload configuration
 let gfs;
 mongoose
   .connect(MONGOOSE_CONNECTION_KEY, {
@@ -56,6 +59,8 @@ const storage = new GridFSStorage({
 
 const upload = multer({ storage });
 
+
+//run express app
 app.listen(PORT, () => {
     console.log(`Server is running in port ${ PORT }`);
 });
