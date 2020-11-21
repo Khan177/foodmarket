@@ -1,6 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const addressModel = require("../models/address");
+const { mongo, connection } = require("mongoose");
+const Grid = require("gridfs-stream");
+let gfs;
+
+connection.once("open", () => {
+  gfs = Grid(connection.db, mongo);
+});
+
 
 router.route("/")
     .all((req, res, next) => {
@@ -19,6 +27,7 @@ router.route("/")
     })
     .post(async(req, res) => {
         try{
+            console.log(req.body)
             let newAddress = new addressModel(req.body);
             await newAddress.save();
             res.json({ message: "Адрес успешно сохранен!" })

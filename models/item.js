@@ -10,11 +10,7 @@ const ItemSchema = mongoose.Schema({
         required: true,
     },
     price: {
-        type: Number,
-        required: true,
-    },
-    categoryId: {
-        type: mongoose.Schema.ObjectId,
+        type: String,
         required: true,
     },
     subcategoryId: {
@@ -23,6 +19,6 @@ const ItemSchema = mongoose.Schema({
     }
 })
 
-const ItemModel = mongoose.model("Subcategory", ItemSchema);
+const ItemModel = mongoose.model("Item", ItemSchema);
 
 module.exports = ItemModel;

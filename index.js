@@ -18,46 +18,30 @@ const GridFS = require("gridfs-stream");
 const multer = require("multer");
 const crypto = require("crypto");
 const addressRouter = require("./routers/addressRouter");
+const categoryRouter = require("./routers/categoryRouter");
+const subcategoryRouter = require("./routers/subcategoryRouter");
+const itemRouter = require("./routers/itemRouter");
+const orderRouter = require("./routers/orderRouter");
 
 //express app configuration
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/addresses", addressRouter);
+app.use("/categories", categoryRouter);
+app.use("/subcategories", subcategoryRouter);
+app.use("/items", itemRouter);
+app.use("/orders", orderRouter);
 
-//db file upload configuration
-let gfs;
-mongoose
-  .connect(MONGOOSE_CONNECTION_KEY, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then((conn) => {
-    gfs = GridFS(conn.connection.db, mongoose.mongo);
-    gfs.collection("uploads");
-  });
+mongoose.connect(MONGOOSE_CONNECTION_KEY, { useUnifiedTopology: true, useNewUrlParser: true });
 
+const connection = mongoose.connection;
 
-const storage = new GridFSStorage({
-    url: MONGOOSE_CONNECTION_KEY,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-        crypto.randomBytes(16, (err, buf) => {
-            if (err) {
-            return reject(err);
-            }
-            const filename = buf.toString("hex") + path.extname(file.originalname);
-            const fileInfo = {
-            filename: filename,
-            bucketName: "uploads",
-            };
-            resolve(fileInfo);
-        });
-        });
-    },
+connection.once("open", function() {
+  console.log("MongoDB database connection established successfully");
 });
 
-const upload = multer({ storage });
+//db file upload configuration
 
 
 //run express app
