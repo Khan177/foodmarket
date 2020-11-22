@@ -9,6 +9,7 @@ const path = require("path");
 const multer = require("multer");
 const crypto = require("crypto");
 const MONGOOSE_CONNECTION_KEY = process.env.MONGOOSE_CONNECTION_KEY;
+const fs = require("fs");
 let gfs;
 
 connection.once("open", () => {

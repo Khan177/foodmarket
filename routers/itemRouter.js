@@ -9,6 +9,7 @@ const multer = require("multer");
 const crypto = require("crypto");
 const MONGOOSE_CONNECTION_KEY = process.env.MONGOOSE_CONNECTION_KEY;
 let gfs;
+const fs = require("fs");
 
 connection.once("open", () => {
     gfs = Grid(connection.db, mongo);
