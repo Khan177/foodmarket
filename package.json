@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "express-session": "^1.17.1",
+    "fs": "0.0.1-security",
     "gridfs-locking-stream": "^1.1.1",
     "gridfs-stream": "^1.1.1",
     "jsonwebtoken": "^8.5.1",
