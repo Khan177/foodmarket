@@ -55,7 +55,7 @@ router.route("/")
         const order = await orderModel.find({_id: req.params.id})
         orderModel.findByIdAndUpdate(
             req.params.id,
-            { $set: { ...order, status: 1-order.statuc } },
+            { $set: { ...order, status: 1-order.status } },
             { new: true },
             (err, docs) => {
               if (!err) res.send({ message: "Заявка успешно изменен!" });
