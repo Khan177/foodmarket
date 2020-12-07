@@ -17,6 +17,7 @@ router.route("/")
     })
     .get(async(req, res) => {
         const orders = await orderModel.find({});
+        console.log(orders)
         try {
             res.send(orders);
         }
@@ -52,10 +53,11 @@ router.route("/")
     })
     .put(async(req, res) => {
       try{
-        const order = await orderModel.find({_id: req.params.id})
+        const order = await orderModel.findOne({_id: req.params.id})
+        order.status = 1-order.status
         orderModel.findByIdAndUpdate(
             req.params.id,
-            { $set: { ...order, status: 1-order.status } },
+            { $set: order },
             { new: true },
             (err, docs) => {
               if (!err) res.send({ message: "Заявка успешно изменен!" });
@@ -72,6 +74,19 @@ router.route("/")
       catch(e){
           res.status(500).json(e.message);
       }
+    })
+    .delete(async(req,res) => {
+        try {
+            const category = await orderModel.findByIdAndDelete(req.params.id);
+            if (!category) res.status(404).send("Такой категории не существует!");
+            res.status(200).send({
+              message: "Заказ успешно удален!",
+            });
+          } catch (err) {
+            res.status(500).json({
+              message: err.message,
+            });
+          }
     });
 
 
