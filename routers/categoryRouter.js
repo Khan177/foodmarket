@@ -11,6 +11,7 @@ const crypto = require("crypto");
 const fs = require("fs");
 const MONGOOSE_CONNECTION_KEY = process.env.MONGOOSE_CONNECTION_KEY;
 let gfs;
+const deploy = require("../config");
 
 connection.once("open", () => {
     gfs = Grid(connection.db, mongo);
@@ -42,8 +43,9 @@ router.route("/")
               message: "Не все поля заполнены!",
             });
         try{
-          let newCategory = new categoryModel({ ...req.body, image: `${req.protocol}://${req.get("host")}${req.originalUrl}/${req.file.filename}`, });
+          let newCategory = new categoryModel({ ...req.body, image: `${process.env.CDN_URL}/${req.file.filename}`, });
               await newCategory.save();
+              deploy();
             res.json({ message: "Категория успешно сохранена!" })
         }
         catch(e){
@@ -83,14 +85,9 @@ router.route("/:id")
               }
             );
           } else {
-            const old = await categoryModel.findById(req.params.id);
-            let filename = old.image.split("/");
-            fs.unlinkSync(`uploads/${filename[filename.length-1]}`)
             obj = {
               ...req.body,
-              image: `${req.protocol}://${req.get("host")}/${
-                req.originalUrl.split("/")[1]
-              }/${req.file.filename}`,
+              image: `${process.env.CDN_URL}/${req.file.filename}`,
               url: req.body.url,
             };
             await categoryModel.findByIdAndUpdate(
@@ -106,6 +103,7 @@ router.route("/:id")
                 else res.send(docs);
               }
             );
+            deploy()
           }
     })
     .delete(async(req, res) => {
@@ -115,8 +113,6 @@ router.route("/:id")
             res.status(200).send({
               message: "Направление успешно удалено!",
             });
-            let filename = category.image.split("/");
-            fs.unlinkSync(`uploads/${filename[filename.length-1]}`)
           } catch (err) {
             res.status(500).json({
               message: err.message,

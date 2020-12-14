@@ -11,6 +11,8 @@ const MONGOOSE_CONNECTION_KEY = process.env.MONGOOSE_CONNECTION_KEY;
 let gfs;
 const fs = require("fs");
 
+const deploy = require("../config");
+
 connection.once("open", () => {
     gfs = Grid(connection.db, mongo);
     gfs.collection("items");

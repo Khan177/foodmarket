@@ -22,6 +22,8 @@ const categoryRouter = require("./routers/categoryRouter");
 const subcategoryRouter = require("./routers/subcategoryRouter");
 const itemRouter = require("./routers/itemRouter");
 const orderRouter = require("./routers/orderRouter");
+const deploy = require("./config")
+deploy();
 
 //express app configuration
 app.use(cors());
